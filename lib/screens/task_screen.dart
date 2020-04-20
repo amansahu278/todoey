@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey/Widgets/task_list.dart';
-import 'package:todoey/screens/add_tast_screen.dart';
-import 'package:todoey/models/task.dart';
+import 'package:todoey/models/task_data.dart';
+import 'package:todoey/screens/add_task_screen.dart';
 
 class TasksScreen extends StatefulWidget {
   @override
@@ -10,24 +11,6 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  bool checked = false;
-
-  List<Task> tasks = [
-    Task(name: "Click the add button to add new tasks"),
-    Task(name: "Click the checkbox to cross off the tasks completed"),
-    Task(name: "Drag the task to left or right to dismiss it")
-  ];
-
-  void updateTasks(String name){
-    setState(() {
-      tasks.add(Task(name: name));
-    });
-  }
-
-  void removedTask(){
-    setState(() {
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +24,7 @@ class _TasksScreenState extends State<TasksScreen> {
             builder: (context) => SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
-                child: AddTaskScreen(
-                  addTaskCallback: updateTasks,
-                ),
+                child: AddTaskScreen(),
               ),
             )
           );
@@ -83,7 +64,7 @@ class _TasksScreenState extends State<TasksScreen> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  '${tasks.length} tasks',
+                  '${Provider.of<TaskData>(context).tasks.length} tasks',
                   style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ],
@@ -97,10 +78,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
-              child: TasksList(
-                tasks: tasks,
-                onDismiss: removedTask,
-              ),
+              child: TasksList(),
             ),
           )
         ],

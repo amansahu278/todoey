@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todoey/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey/models/task_data.dart';
 
 // ignore: must_be_immutable
 class AddTaskScreen extends StatelessWidget {
 
-  AddTaskScreen({this.addTaskCallback});
-  final Function addTaskCallback;
   String newTaskTitle;
 
   @override
@@ -44,7 +45,7 @@ class AddTaskScreen extends StatelessWidget {
             ),
             FlatButton(
               onPressed: (){
-                addTaskCallback(newTaskTitle);
+                Provider.of<TaskData>(context, listen: false).addTask(Task(name: newTaskTitle));
                 Navigator.pop(context);
               },
               color: Colors.lightBlueAccent,

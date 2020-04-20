@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'task_tile.dart';
-import 'package:todoey/models/task.dart';
+import 'package:todoey/models/task_data.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class TasksList extends StatefulWidget {
-  TasksList({this.tasks,this.onDismiss});
-
-  Function onDismiss;
-  List<Task> tasks;
-
   @override
   _TasksListState createState() => _TasksListState();
 }
@@ -16,27 +12,27 @@ class TasksList extends StatefulWidget {
 class _TasksListState extends State<TasksList> {
   @override
   Widget build(BuildContext context) {
+    var tasks = Provider.of<TaskData>(context).tasks;
     return ListView.builder(
-      itemCount: widget.tasks.length,
+      itemCount: tasks.length,
       itemBuilder: (context, int index) {
         return Dismissible(
-          key: Key(widget.tasks[index].name),
+          key: Key(tasks[index].name),
           background: Container(
             color: Colors.lightBlueAccent,
           ),
           child: TaskTile(
-            taskTitle: widget.tasks[index].name,
-            isChecked: widget.tasks[index].isDone,
+            taskTitle: tasks[index].name,
+            isChecked: tasks[index].isDone,
             checkBoxCallback: (bool newCheckboxState) {
               setState(() {
-                widget.tasks[index].isDone = newCheckboxState;
+                tasks[index].toggleDone();
               });
             },
           ),
           onDismissed: (direction) {
             setState(() {
-              widget.tasks.removeAt(index);
-              widget.onDismiss();
+              Provider.of<TaskData>(context, listen: false).removeTask(index);
             });
           },
         );
