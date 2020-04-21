@@ -6,11 +6,9 @@ import 'package:todoey/models/task_data.dart';
 
 // ignore: must_be_immutable
 class AddTaskScreen extends StatelessWidget {
-
-  String newTaskTitle;
-
   @override
   Widget build(BuildContext context) {
+    String newTaskTitle;
     return Container(
       color: Color(0xff757575),
       child: Container(
@@ -38,6 +36,7 @@ class AddTaskScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               onChanged: (value){
                 newTaskTitle = value;
+                print(newTaskTitle);
               },
             ),
             SizedBox(
@@ -45,6 +44,7 @@ class AddTaskScreen extends StatelessWidget {
             ),
             FlatButton(
               onPressed: (){
+                print("pressed");
                 Provider.of<TaskData>(context, listen: false).addTask(Task(name: newTaskTitle));
                 Navigator.pop(context);
               },

@@ -3,38 +3,34 @@ import 'task_tile.dart';
 import 'package:todoey/models/task_data.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
-class TasksList extends StatefulWidget {
-  @override
-  _TasksListState createState() => _TasksListState();
-}
-
-class _TasksListState extends State<TasksList> {
+class TasksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var tasks = Provider.of<TaskData>(context).tasks;
-    return ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: (context, int index) {
-        return Dismissible(
-          key: Key(tasks[index].name),
-          background: Container(
-            color: Colors.lightBlueAccent,
-          ),
-          child: TaskTile(
-            taskTitle: tasks[index].name,
-            isChecked: tasks[index].isDone,
-            checkBoxCallback: (bool newCheckboxState) {
-              setState(() {
-                tasks[index].toggleDone();
-              });
+    return Consumer<TaskData>(
+      builder: (context, taskData, child){
+        return  ListView.builder(
+          itemCount: taskData.taskCount,
+          itemBuilder: (context, int index) {
+            return Dismissible(
+              key: Key(taskData.tasks[index].name),
+              background: Container(
+                color: Colors.lightBlueAccent,
+              ),
+              child: TaskTile(
+                taskTitle: taskData.tasks[index].name,
+                isChecked: taskData.tasks[index].isDone,
+                checkBoxCallback: (bool newCheckboxState) {
+                  taskData.updateTask(taskData.tasks[index]);
+                },
+                longPressCallback: (){
+                  taskData.removeTask(index);
+                },
+              ),
+              onDismissed: (direction) {
+                taskData.removeTask(index);
+              },
+            );
             },
-          ),
-          onDismissed: (direction) {
-            setState(() {
-              Provider.of<TaskData>(context, listen: false).removeTask(index);
-            });
-          },
         );
       },
     );
